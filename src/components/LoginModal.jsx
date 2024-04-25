@@ -1,67 +1,20 @@
-import { React, Fragment, useState, useEffect} from 'react'
+import { React, Fragment, useCallback} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { loginHook } from '../hook/loginHook'
 
-export default function LoginModal({ show, login, setLogin, setCheck }) {
+export default function LoginModal() {
 
-    //Estado para modificar si se muestra el modal o no
-    const [isOpen, setIsOpen] = useState(show)
+    const {changeClose, clickClose, userLogin, userData, closeShow, isOpen, user} = loginHook()
 
-    //Estado para guardar la informacion del cliente antes de enviar el form
-    const [user, setUser] = useState({
-
-        email: '',
-        password: ''
-    })
-
-    //Funcion para modificar el valor del estado 'check' y mostrar el elemento de registro
-    const changeCheck = () => {
-
-        setCheck(true)
-
-    }
-
-    //Funcion para guardar los datos ingresado por el cliente en el estado 'user'
-    const userLogin = (e) => {
-
-        const {name, value} = e.target
-
-        setUser(() => ({...user, [name]: value}))
-        
-    }
-
-    //Funcion para enviar los datos del estado 'user' al estado 'login'
-    const userData = () => {
-
-        setLogin({
-
-            ...login,
-            email: user.email,
-            password: user.password
-
-        })
-    }
-
-    //useEffect para que se modifique el valor inicial del estado 'isOpen' cada vez que se modifica el estado 'show'
-    useEffect(() => {
-        setIsOpen(show)
-    }, [show])
-
-    //Funcion para cerrar el modal modificando el valor del estado 'user' a false
-    const closeShow = (e) => {
-        e.preventDefault()
-        setIsOpen(false)
-    }
-
-    //Funcion para cerrar el estado del modal cuando hago click sobre el boton ingresar
-    const clickClose = () => {
-        setIsOpen(false)
-    }
+    const handleClose = useCallback(() => {changeClose()}, [changeClose])
+    const handleClick = useCallback(() => {clickClose()}, [clickClose])
+    const handleShow = useCallback(() => {closeShow()}, [closeShow])
     
     return (
         <>
 
             <Transition appear show={isOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-10" onClose={clickClose}>
+                <Dialog as="div" className="relative z-10" onClose={handleClick}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -87,7 +40,7 @@ export default function LoginModal({ show, login, setLogin, setCheck }) {
                             >
                                 <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-2xl bg-red-500 p-6 text-left align-middle shadow-xl transition-all">
 
-                                    <form className="w-full h-full grid grid-col space-y-5 justify-items-center" onSubmit={closeShow}>
+                                    <form className="w-full h-full grid grid-col space-y-5 justify-items-center" onSubmit={handleShow}>
 
                                         <h3 className="text-xl font-bold text-white w-full text-center border-b-2 pb-4 uppercase">
                                             Login
@@ -106,7 +59,7 @@ export default function LoginModal({ show, login, setLogin, setCheck }) {
                                         <input type="submit" value="ingresar" className="p-2 bg-white rounded-lg w-1/4 hover:bg-slate-700 hover:text-white cursor-pointer duration-200" onClick={userData}/>
 
                                         <div className="w-full text-center grid grid-cols-2 text-white">
-                                            <p className="cursor-pointer hover:text-lg duration-200 p-4 w-full h-2" onClick={changeCheck}>¿No posees cuenta? ¡Registrate aquí!</p>
+                                            <p className="cursor-pointer hover:text-lg duration-200 p-4 w-full h-2" onClick={handleClose}>¿No posees cuenta? ¡Registrate aquí!</p>
                                             <p className="cursor-pointer hover:text-lg duration-200 p-4 w-full h-2">¿Olvidaste tu contraseña?</p>
                                         </div>
 
