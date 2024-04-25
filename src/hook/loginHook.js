@@ -1,11 +1,9 @@
 import {useState, useEffect, useContext} from 'react';
 import { ShowContext } from '../context/showContext';
-import { headerHook } from './headerHook';
 
 export const loginHook = () => {
 
-    const {setLogin, login} = headerHook()
-    const {show, changeCheck} = useContext(ShowContext)
+    const {show, changeCheck, setLogin, login} = useContext(ShowContext)
 
     //Estado para modificar si se muestra el modal o no
     const [isOpen, setIsOpen] = useState(show)
@@ -16,11 +14,11 @@ export const loginHook = () => {
     }, [show])
 
 
-    //Estado para guardar la informacion del cliente antes de enviar el form
     const [user, setUser] = useState({
 
         email: '',
         password: ''
+
     })
 
     //Funcion para guardar los datos ingresado por el cliente en el estado 'user'
@@ -32,21 +30,39 @@ export const loginHook = () => {
 
     }
 
-    //Funcion para enviar los datos del estado 'user' al estado 'login'
     const userData = () => {
 
         setLogin({
-
             ...login,
             email: user.email,
             password: user.password
-
         })
+
     }
 
+    //Reseteo del estado 'login' para liberar los campos del form
+    const closeLogin = () => {
+
+        setLogin({
+
+            email: '',
+            password: ''
+
+        })
+
+        setUser({
+
+            ...login,
+            email: '',
+            password: ''
+
+        })
+
+    }
+   
+
     //Funcion para cerrar el modal modificando el valor del estado 'user' a false
-    const closeShow = (e) => {
-        e.preventDefault()
+    const closeShow = () => {
         setIsOpen(false)
     }
 
@@ -68,11 +84,12 @@ export const loginHook = () => {
         isOpen,
         changeClose, 
         clickClose, 
-        userLogin, 
-        userData, 
+        userLogin,  
         closeShow,
+        closeLogin,
+        userData,
         user
-
+    
     }
 
 }

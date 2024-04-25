@@ -31,9 +31,17 @@ const ShowProvider = ({children}) => {
 
     }
 
+    //Estado para guardar la informacion del cliente ingresado por el form de login
+    const [login, setLogin] = useState({
+
+        email: '',
+        password: ''
+
+    })
+
     return (
 
-        <ShowContext.Provider value={{show, changeShow, check, changeCheck, changeCheckTwo}}>
+        <ShowContext.Provider value={{show, changeShow, check, changeCheck, changeCheckTwo, setLogin, login}}>
             {children}
         </ShowContext.Provider>
 

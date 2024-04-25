@@ -4,11 +4,11 @@ import { loginHook } from '../hook/loginHook'
 
 export default function LoginModal() {
 
-    const {changeClose, clickClose, userLogin, userData, closeShow, isOpen, user} = loginHook()
+    const {changeClose, clickClose, userLogin, user, userData, closeShow, isOpen} = loginHook()
 
     const handleClose = useCallback(() => {changeClose()}, [changeClose])
     const handleClick = useCallback(() => {clickClose()}, [clickClose])
-    const handleShow = useCallback(() => {closeShow()}, [closeShow])
+    const handleShow = useCallback((e) => {e.preventDefault(), closeShow()}, [closeShow])
     
     return (
         <>

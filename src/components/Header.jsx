@@ -2,22 +2,25 @@ import { useCallback, useContext } from 'react'
 import { ShowContext } from '../context/showContext'
 import { headerHook } from '../hook/headerHook'
 import LoginModal from './LoginModal'
+import { loginHook } from '../hook/loginHook'
 
 const Header = () => {
 
-    const {validMail, closeLogin, login} = headerHook()
-    const {changeShow, changeCheckTwo} = useContext(ShowContext)
-    
+    const {validMail} = headerHook()
+    const {closeLogin} = loginHook()
+    const {changeShow, changeCheckTwo, login} = useContext(ShowContext)
+
 
     const handleShow = useCallback(() => {changeShow()}, [changeShow])
     const handleCheck = useCallback(() => {changeCheckTwo()}, [changeCheckTwo])
     const handleValid = useCallback(() => validMail(login.email), [validMail, login.email])
+    const handleClose = useCallback(() => closeLogin(), [closeLogin])
 
     return (
         <>
             <header>
                 <nav id="nav" className="grid grid-cols-4 items-center mb-10 justify-between fixed w-full z-50 h-16 border-b-2 border-red-400 bg-red-500 drop-shadow-md">
-                    <h1 className="ml-4 text-2xl font-bold cursor-pointer" onClick={handleCheck}>
+                    <h1 className="ml-4 text-2xl font-bold cursor-pointer text-slate-900" onClick={handleCheck}>
                         Ivan Yang - <span className="col-span-1 text-gray-50">Porfolio</span>
                     </h1>
 
@@ -58,10 +61,10 @@ const Header = () => {
                             :
 
                             <div className="self-center flex flex-row space-x-6">
-                                <p className="p-2 w-1/2 text-center rounded-sm font-bold shadow-lg text-red-500 uppercase bg-slate-50">
+                                <p className="p-2 w-1/2 text-center rounded-sm font-bold shadow-lg overflow-hidden text-red-500 uppercase bg-slate-50 hover:bg-slate-900 hover:text-white hover:font-bold duration-200">
                                     {login.email}
                                 </p>
-                                <button className="bg-slate-50 p-2 w-10 rounded-full hover:bg-slate-900 hover:text-white hover:font-bold duration-200" onClick={() => closeLogin()}>
+                                <button className="bg-slate-50 p-2 w-10 rounded-full hover:bg-slate-900 hover:text-white hover:font-bold duration-200" onClick={handleClose}>
                                     X
                                 </button>
                             </div>
